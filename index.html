@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>坦克大战游戏</title>
+    <style>
+        #game-container {
+            width: 1500px;
+            height: 1500px;
+            margin: 0 auto;
+             background-image: url("https://img1.baidu.com/it/u=2256354903,705514649&fm=253&fmt=auto&app=120&f=JPEG?w=1500&h=1500");
+            position: relative;
+            border: 2px solid black;
+        }
+        #player-tank {
+            width: 50px;
+            height: 50px;
+          border-radius: 100px;
+             -webkit-border-radius: 100px;
+            background-color: purple;
+            position: absolute;
+        }
+        .enemy-tank {
+            width: 50px;
+            height: 50px;
+          border-radius: 100px;
+             -webkit-border-radius: 100px;
+            background-color: blue;
+            position: absolute;
+        }
+        .bullet {
+            width: 10px;
+            height: 10px;
+              border-radius: 5px;
+             -webkit-border-radius: 5px;
+            background-color: #FFFF00;
+            position: absolute;
+        }
+    </style>
+</head><body>
+    <div id="game-container">
+        <div id="player-tank"></div>
+    </div>
+
+    <script>
+        // 获取游戏容器和玩家坦克元素
+        var gameContainer = document.getElementById("game-container");
+        var playerTank = document.getElementById("player-tank");
+// 设置玩家坦克的初始位置
+        var playerTankX = (gameWidth - 50) / 2;
+        var playerTankY = gameHeight - 60;
+        playerTank.style.left = playerTankX + "px";
+        playerTank.style.top = playerTankY + "px";
+
+        // 监听键盘按下事件
+        document.addEventListener("keydown", function(event) {
+            var keyCode = event.keyCode;
+            if (keyCode === 37) {
+                // 左箭头键，向左移动
+                if (playerTankX > 0) {
+                    playerTankX -= 5;
+                    playerTank.style.left = playerTankX + "px";
+                }
+            } else if (keyCode === 39) {
+                // 右箭头键，向右移动
+                if (playerTankX < gameWidth - 50) {
+                    playerTankX += 5;
+                    playerTank.style.left = playerTankX + "px";
+                }
+            } else if (keyCode === 38) {
+                // 上箭头键，向上移动
+                if (playerTankY > 0) {
+                    playerTankY -= 5;
+                    playerTank.style.top = playerTankY + "px";
+                }
+            } else if (keyCode === 40) {
+                // 下箭头键，向下移动
+                if (playerTankY < gameHeight - 50) {
+                    playerTankY += 5;
+                    playerTank.style.top = playerTankY + "px";
+                }
+            } else if (keyCode === 32) {
+                // 空格键，发射子弹
+                createBullet(playerTankX + 25, playerTankY, "up");
+            }
+        });
+
+        // 创建子弹
+        function createBullet(x, y, direction) {
+            var bullet = document.createElement("div");
+            bullet.className = "bullet";
+            bullet.style.left = x + "px";
+            bullet.style.top = y + "px";
+            gameContainer.appendChild(bullet);
+
+            moveBullet(bullet, direction);
+        }
+
+        // 移动子弹
+        function moveBullet(bullet, direction) {
+            var bulletX = parseInt(bullet.style.left);
+            var bulletY = parseInt(bullet.style.top);
+
+            if (direction === "up") {
+                bulletY -= 5;
+                bullet.style.top = bulletY + "px";
+            } else if (direction === "down") {
+                bulletY += 5;
+                bullet.style.top = bulletY + "px";
+            } else if (direction === "left") {
+                bulletX -= 5;
+                bullet.style.left = bulletX + "px";
+            } else if (direction === "right") {
+                bulletX += 5;
+                bullet.style.left = bulletX + "px";
+            }
+
+            // 检测子弹是否击中敌机
+            var 敌军坦克=文档。getElementsByClassName("敌坦克");
+            为 (var 我=0我<敌人坦克。长度；i++) {
+                var 敌坦克=敌军坦克[我];
+                如果 (bulletX>敌方坦克。offsetLeft-10&&bulletX<敌方坦克。offsetLeft+50&&
+恶霸>敌坦克。offsetTop-10&&bullety<敌人坦克。offsetTop+50) {
+敌坦克。parentNode.removeChild(敌坦克);
+子弹。parentNode.removeChild(子弹);
+                    打破;
+                }
+            }
+
+            // 检测子弹是否出界
+            如果 (欺凌<0|bullety>gameHeight||bulletX<0|bulletX>gameWidth) {
+子弹。parentNode.removeChild(子弹);
+            } 其他 {
+                // 继续移动子弹
+                setTimeout(功能() {
+                    moveBullet(项目符号，方向);
+                },10);
+            }
+        }
+
+        // 创建敌机
+        // 设置游戏容器的宽度和高度
+        var gameWidth=900;
+        var gameHeight=720;
+gameContainer。风格.宽度=gameWidth+"px";
+gameContainer。风格.高度=gameHeight+"px";功能 createEnemyTank() {
+            var 敌坦克=文档。createElement("div");
+敌坦克。className="敌坦克";
+敌坦克。风格.左=数学。地板(数学。随机()*(gameWidth-50))+"px";
+敌坦克。风格.顶端=数学。地板(数学。随机()* -200)+"px";
+gameContainer。appendChild(敌坦克);
+
+            moveEnemyTank(敌坦克);
+        }
+
+        // 移动敌机
+        功能 moveEnemyTank(敌坦克) {
+            var 敌军坦克=parseInt(敌坦克。风格.顶端);
+
+敌军坦克+=2;
+敌坦克。风格.顶端=敌方坦克+"px";
+
+            // 检测敌机是否击中玩家坦克
+            如果 (敌方坦克>玩家坦克-50&&firthTankY<playerTankY+50&&
+                parseInt(敌坦克。风格.左)>playerTankX-50&&parseInt(敌坦克。风格.左)<playerTankX+50) {
+                // 玩家坦克被击中
+敌坦克。parentNode.removeChild(敌坦克);
+                警惕的("玩家坦克被击中！");
+                // 结束游戏或者重置玩家位置等操作
+            }
+
+            // 检测敌机是否出界
+            如果 (finternantTankY>gameHeight) {
+敌坦克。parentNode.removeChild(敌坦克);
+            } 其他 {
+                // 继续移动敌机
+                setTimeout(功能() {
+                    moveEnemyTank(敌坦克);
+                },10);
+            }
+        }
+
+        // 创建敌机定时器
+        setInterval(功能() {
+            createEnemyTank();
+        },2000);
+    </脚本>
+</身体>
+<超文本标记语言>
